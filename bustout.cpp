@@ -11,12 +11,16 @@
 #include "texture.h"
 #include "resource_manager.h"
 #include "sprite_renderer.h"
+#include "game_object.h"
+#include "game_level.h"
 #include "util.cpp"
 #include "game.cpp"
 #include "shader.cpp"
 #include "texture.cpp"
 #include "resource_manager.cpp"
 #include "sprite_renderer.cpp"
+#include "game_object.cpp"
+#include "game_level.cpp"
 
 const GLuint SCREEN_WIDTH = 800;
 const GLuint SCREEN_HEIGHT = 600;
