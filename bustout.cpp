@@ -10,11 +10,13 @@
 #include "shader.h"
 #include "texture.h"
 #include "resource_manager.h"
+#include "sprite_renderer.h"
 #include "util.cpp"
 #include "game.cpp"
 #include "shader.cpp"
 #include "texture.cpp"
-#include "resource_manager.h"
+#include "resource_manager.cpp"
+#include "sprite_renderer.cpp"
 
 const GLuint SCREEN_WIDTH = 800;
 const GLuint SCREEN_HEIGHT = 600;
@@ -43,7 +45,7 @@ int main(int argc, char** argv)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
@@ -52,7 +54,7 @@ int main(int argc, char** argv)
 
 	glewExperimental = GL_TRUE;
 	glewInit();
-	glGetError();
+	CHECK_ERROR;
 
 	glfwSetKeyCallback(window, key_callback);
 
@@ -67,6 +69,11 @@ int main(int argc, char** argv)
 	GLfloat last_frame = 0.0f;
 
 	bustout.state = GAME_ACTIVE;
+
+
+	char* version = (char*)glGetString(GL_VERSION);
+	char* render = (char*)glGetString(GL_RENDERER);
+	printf("version=%s, renderer=%s\n", version, render);
 
 	while (!glfwWindowShouldClose(window))
 	{

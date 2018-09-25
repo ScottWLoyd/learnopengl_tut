@@ -5,4 +5,7 @@
 
 static const char* read_entire_file(const char* file, bool binary = false);
 
+#define CHECK_ERROR check_gl_error(__FILE__, __LINE__)
+static void check_gl_error(const char* file, int line);
+
 #endif

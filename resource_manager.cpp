@@ -36,7 +36,7 @@ static Texture2D load_texture_from_file(const char* file, bool alpha)
 		result.image_format = GL_RGBA;
 	}
 	int x, y, n;
-	int colors_per_channel = alpha ? 4 : 3;
+	int colors_per_channel = alpha ? STBI_rgb_alpha : STBI_rgb;
 	unsigned char *data = stbi_load(file, &x, &y, &n, colors_per_channel);
 	generate_texture(&result, x, y, data);	
 	stbi_image_free(data);

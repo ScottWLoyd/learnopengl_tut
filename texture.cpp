@@ -11,7 +11,7 @@ static Texture2D new_texture()
 	result.wrap_s = GL_REPEAT;
 	result.wrap_t = GL_REPEAT;
 	result.filter_min = GL_LINEAR;
-	result.filter_min = GL_LINEAR;
+	result.filter_max = GL_LINEAR;
 	glGenTextures(1, &result.id);
 
 	return result;
@@ -28,6 +28,7 @@ static void generate_texture(Texture2D* t, GLuint width, GLuint height, unsigned
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, t->filter_min);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, t->filter_max);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	CHECK_ERROR;
 }
 
 static void bind_texture(Texture2D* t)

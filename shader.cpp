@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <GL/glew.h>
+#include <gtc/type_ptr.hpp>
 
 #include "bo_math.h"
 #include "shader.h"
@@ -63,7 +64,8 @@ static void shader_set_integer(Shader* s, const GLchar* name, GLint value, GLboo
 	{
 		shader_use(s);
 	}
-	glUniform1i(glGetUniformLocation(s->id, name), value);
+	GLint loc = glGetUniformLocation(s->id, name);
+	glUniform1i(loc, value);
 }
 
 static void shader_set_vector2f(Shader* s, const GLchar* name, GLfloat x, GLfloat y, GLboolean use_shader)
@@ -99,7 +101,8 @@ static void shader_set_vector3f(Shader* s, const GLchar* name, Vec3 value, GLboo
 	{
 		shader_use(s);
 	}
-	glUniform3f(glGetUniformLocation(s->id, name), value.x, value.y, value.z);
+	GLint loc = glGetUniformLocation(s->id, name);
+	glUniform3f(loc, value.x, value.y, value.z);
 }
 
 static void shader_set_vector4f(Shader* s, const GLchar* name, GLfloat x, GLfloat y, GLfloat z, GLfloat w, GLboolean use_shader)
@@ -126,7 +129,8 @@ static void shader_set_matrix4(Shader* s, const GLchar* name, Mat4 value, GLbool
 	{
 		shader_use(s);
 	}
-	glUniformMatrix4fv(glGetUniformLocation(s->id, name), 1, GL_FALSE, value.e);
+	GLint loc = glGetUniformLocation(s->id, name);
+	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
 }
 
 static void shader_check_compile_errors(Shader* s, GLuint object, const char* type)
