@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "bo_math.h"
 #include "game_level.h"
 
 enum GameState {
@@ -28,5 +29,8 @@ static void game_update(Game* game, GLfloat dt);
 static void game_render(Game* game);
 
 static void do_collisions(Game* game);
+
+
+static ScreenDirection vector_direction(Vec2 v);
 
 #endif

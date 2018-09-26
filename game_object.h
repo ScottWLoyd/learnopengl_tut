@@ -4,6 +4,22 @@
 #include "bo_math.h"
 #include "texture.h"
 #include "sprite_renderer.h"
+#include "game.h"
+
+
+
+enum ScreenDirection {
+	DirectionUp,
+	DirectionLeft,
+	DirectionDown,
+	DirectionRight,
+};
+
+struct CollisionResult {
+	bool collided;
+	ScreenDirection direction;
+	Vec2 difference;
+};
 
 enum GameObjectType {
 	GameObject_None,
@@ -41,7 +57,7 @@ GameObject* new_ball(Vec2 pos, float radius, Vec2 velocity, Texture2D sprite);
 Vec2 move_ball(GameObject* ball, float dt, uint32_t window_width);
 void reset_ball(GameObject* ball, Vec2 position, Vec2 velocity);
 
-bool check_collision(GameObject* a, GameObject* b);
+CollisionResult check_collision(GameObject* a, GameObject* b);
 
 
 #endif

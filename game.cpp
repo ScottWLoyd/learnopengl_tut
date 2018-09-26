@@ -131,13 +131,83 @@ static void do_collisions(Game* game)
 	{
 		if (!box.block_destroyed)
 		{
-			if (check_collision(&box, ball))
+			CollisionResult collision = check_collision(&box, ball);
+			if (collision.collided)
 			{
 				if (!box.block_is_solid)
 				{
 					box.block_destroyed = true;
 				}
+				ScreenDirection dir = collision.direction;
+				Vec2 diff_vector = collision.difference;
+				if (dir == DirectionLeft || dir == DirectionRight)
+				{
+					ball->velocity.x = -ball->velocity.x;
+					float penetration = ball->ball_radius - fabs(diff_vector.x);
+					// TODO(scott): make this precise instead of snapping out of the box
+					if (dir == DirectionLeft)
+					{
+						ball->position.x += penetration;
+					}
+					else
+					{
+						assert(dir == DirectionRight);
+						ball->position.x -= penetration;
+					}
+				}
+				else
+				{
+					assert(dir == DirectionUp || dir == DirectionDown);
+					ball->velocity.y = -ball->velocity.y;
+					float penetration = ball->ball_radius - fabs(diff_vector.y);
+					// TODO(scott): make this precise instead of snapping out of the box
+					if (dir == DirectionUp)
+					{
+						ball->position.y -= penetration;
+					}
+					else
+					{
+						assert(dir == DirectionDown);
+						ball->position.y += penetration;
+					}
+				}
 			}
 		}
 	}
+	// Check paddle collision
+	CollisionResult collision = check_collision(ball, player);
+	if (!ball->ball_stuck && collision.collided)
+	{
+		float paddle_center = player->position.x + player->size.x / 2.0f;
+		float distance = (ball->position.x + ball->ball_radius) - paddle_center;
+		float percentage = distance / (player->size.x / 2.0f);
+		float strength = 2.0f;
+		Vec2 old_velocity = ball->velocity;
+		ball->velocity.x = INITIAL_BALL_VELOCITY.x * percentage * strength;
+		ball->velocity.y = -ball->velocity.y;
+		ball->velocity = glm::normalize(ball->velocity) * glm::length(old_velocity);
+	}
+}
+
+static ScreenDirection vector_direction(Vec2 v)
+{
+	Vec2 compass[] = {
+		{0, 1}, // Up
+		{-1, 0}, // Left
+		{0, -1}, // Down
+		{1, 0}, // Right
+	};
+
+	float max = 0;
+	int best_match = -1;
+	for (int i = 0; i < 4; i++)
+	{
+		float dot = glm::dot(v, compass[i]);
+		if (dot > max)
+		{
+			max = dot;
+			best_match = i;
+		}
+	}
+	return (ScreenDirection)best_match;
 }

@@ -3,8 +3,8 @@
 
 static void init_level(GameLevel* level, std::vector<std::vector<int>> tile_data, uint32_t level_width, uint32_t level_height)
 {
-	uint32_t height = tile_data.size();
-	uint32_t width = tile_data[0].size();
+	uint32_t height = (uint32_t)tile_data.size();
+	uint32_t width = (uint32_t)tile_data[0].size();
 	float unit_width = level_width / (float)width;
 	float unit_height = level_height / (float)height;
 	for (uint32_t y = 0; y < height; y++)
