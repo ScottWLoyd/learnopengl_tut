@@ -18,7 +18,7 @@ static void init_level(GameLevel* level, std::vector<std::vector<int>> tile_data
 				GameObject* obj = new_game_object(GameObject_Brick);
 				obj->position = pos;
 				obj->size = size;
-				obj->is_solid = true;
+				obj->block_is_solid = true;
 				obj->sprite = get_texture("block_solid");
 				obj->color = Vec3{ 0.8f, 0.8f, 0.7f };
 				level->bricks.push_back(*obj);
@@ -85,7 +85,7 @@ void draw_game_level(GameLevel* level, SpriteRenderer* renderer)
 {
 	for (GameObject& tile : level->bricks)
 	{
-		if (!tile.destroyed)
+		if (!tile.block_destroyed)
 			draw_game_object(&tile, renderer);
 	}
 }
@@ -94,7 +94,7 @@ bool level_is_completed(GameLevel* level)
 {
 	for (GameObject& tile : level->bricks)
 	{
-		if (!tile.is_solid && !tile.destroyed)
+		if (!tile.block_is_solid && !tile.block_destroyed)
 			return false;
 	}
 	return true;

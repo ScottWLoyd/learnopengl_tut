@@ -27,4 +27,6 @@ static void game_process_input(Game* game, GLfloat dt);
 static void game_update(Game* game, GLfloat dt);
 static void game_render(Game* game);
 
+static void do_collisions(Game* game);
+
 #endif
