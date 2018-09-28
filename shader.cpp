@@ -83,7 +83,10 @@ static void shader_set_vector2f(Shader* s, const GLchar* name, Vec2 value, GLboo
 	{
 		shader_use(s);
 	}
-	glUniform2f(glGetUniformLocation(s->id, name), value.x, value.y);
+	GLint loc = glGetUniformLocation(s->id, name);
+	CHECK_ERROR;
+	glUniform2f(loc, value.x, value.y);
+	CHECK_ERROR;
 }
 
 static void shader_set_vector3f(Shader* s, const GLchar* name, GLfloat x, GLfloat y, GLfloat z, GLboolean use_shader)

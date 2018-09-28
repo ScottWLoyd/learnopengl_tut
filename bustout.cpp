@@ -13,6 +13,7 @@
 #include "sprite_renderer.h"
 #include "game_object.h"
 #include "game_level.h"
+#include "particle_generator.h"
 #include "util.cpp"
 #include "game.cpp"
 #include "shader.cpp"
@@ -21,6 +22,7 @@
 #include "sprite_renderer.cpp"
 #include "game_object.cpp"
 #include "game_level.cpp"
+#include "particle_generator.cpp"
 
 const GLuint SCREEN_WIDTH = 800;
 const GLuint SCREEN_HEIGHT = 600;

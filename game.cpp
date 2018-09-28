@@ -2,6 +2,7 @@
 #include <gtc/matrix_transform.hpp>
 
 #include "game.h"
+#include "particle_generator.h"
 
 static SpriteRenderer* renderer = NULL;
 
@@ -13,17 +14,23 @@ static Vec2 INITIAL_BALL_VELOCITY = Vec2{ 100, -350 };
 static float BALL_RADIUS = 12.5f;
 static GameObject* ball;
 
+static ParticleGenerator* particles;
+
 static void game_init(Game* game, GLuint width, GLuint height)
 {
 	game->width = width;
 	game->height = height;
 
+	// Load shaders
 	load_shader("shaders/2d_vertex.glsl", "shaders/2d_fragment.glsl", NULL, "sprite");
 	glm::mat4 projection = glm::ortho(0.0f, (GLfloat)width, (GLfloat)height, 0.0f, -1.0f, 1.0f);
 	Shader sprite_shader = get_shader("sprite");
 	shader_use(&sprite_shader);
 	shader_set_integer(&sprite_shader, "image", 0);
 	shader_set_matrix4(&sprite_shader, "projection", projection);
+
+	load_shader("shaders/particle_vertex.glsl", "shaders/particle_fragment.glsl", NULL, "particle");
+	
 
 	// Load textures
 	renderer = new_sprite_renderer(sprite_shader);
@@ -33,6 +40,8 @@ static void game_init(Game* game, GLuint width, GLuint height)
 	load_texture("textures/block.png", false, "block");
 	load_texture("textures/block_solid.png", false, "block_solid");
 	load_texture("textures/paddle.png", true, "paddle");
+	load_texture("textures/particle.png", true, "particle");
+
 	// Load levels
 	load_game_level(&game->levels[0], 0, width, (uint32_t)(height * 0.5f));
 	game->num_levels++;
@@ -54,6 +63,8 @@ static void game_init(Game* game, GLuint width, GLuint height)
 	
 	Vec2 ball_pos = player_pos + Vec2{ PLAYER_SIZE.x / 2 - BALL_RADIUS, -BALL_RADIUS * 2 };
 	ball = new_ball(ball_pos, BALL_RADIUS, INITIAL_BALL_VELOCITY, get_texture("ball"));
+
+	particles = new_particle_generator(get_shader("particle"), get_texture("particle"), 500);
 
 	game->current_level = 0;
 
@@ -108,6 +119,7 @@ static void game_update(Game* game, GLfloat dt)
 {
 	move_ball(ball, dt, game->width);
 	do_collisions(game);
+	update_particles(particles, dt, ball, 2, Vec2{ ball->ball_radius / 2 });
 }
 
 static void game_render(Game* game)
@@ -119,6 +131,7 @@ static void game_render(Game* game)
 
 		draw_game_level(&game->levels[game->current_level], renderer);
 		draw_game_object(player, renderer);
+		draw_particles(particles);
 		draw_game_object(ball, renderer);
 		//texture = get_texture("face");
 		//draw_sprite(renderer, &texture, Vec2{ 0, 0 }, Vec2{ game->width, game->height});
